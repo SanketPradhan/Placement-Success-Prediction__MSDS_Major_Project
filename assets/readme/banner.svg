@@ -1,0 +1,29 @@
+<svg width="1400" height="420" viewBox="0 0 1400 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="55%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="420" rx="28" fill="url(#bg)"/>
+  <circle cx="1180" cy="110" r="160" fill="#ffffff" opacity="0.12"/>
+  <circle cx="240" cy="330" r="220" fill="#ffffff" opacity="0.08"/>
+  <rect x="120" y="90" width="1160" height="240" rx="24" fill="url(#card)" stroke="#ffffff" stroke-opacity="0.22"/>
+  <rect x="170" y="140" width="220" height="140" rx="20" fill="#ffffff" opacity="0.16"/>
+  <rect x="430" y="150" width="180" height="18" rx="9" fill="#ffffff" opacity="0.85"/>
+  <rect x="430" y="182" width="260" height="14" rx="7" fill="#ffffff" opacity="0.7"/>
+  <rect x="430" y="212" width="220" height="14" rx="7" fill="#ffffff" opacity="0.7"/>
+  <rect x="430" y="242" width="180" height="14" rx="7" fill="#ffffff" opacity="0.7"/>
+  <path d="M980 250 L1030 180 L1090 220 L1150 150" stroke="#e0f2fe" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <circle cx="980" cy="250" r="10" fill="#f8fafc"/>
+  <circle cx="1030" cy="180" r="10" fill="#f8fafc"/>
+  <circle cx="1090" cy="220" r="10" fill="#f8fafc"/>
+  <circle cx="1150" cy="150" r="10" fill="#f8fafc"/>
+  <text x="170" y="330" fill="#f8fafc" font-family="Segoe UI, Arial, sans-serif" font-size="44" font-weight="700">Placement Success Prediction</text>
+  <text x="170" y="368" fill="#dbeafe" font-family="Segoe UI, Arial, sans-serif" font-size="22">Interpretable machine learning for career outcome forecasting</text>
+</svg>
