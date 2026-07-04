@@ -244,11 +244,6 @@ This project is well-suited for a professional portfolio because it demonstrates
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome. If you would like to improve the model, expand the explainability layer, or enhance the interface, feel free to open a pull request or propose a feature direction.
-
----
 
 ## 📌 Notes
 
