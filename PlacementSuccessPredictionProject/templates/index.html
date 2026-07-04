@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Placement Success Prediction</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f7ff;
+      --panel: #ffffff;
+      --text: #112236;
+      --muted: #5f6f86;
+      --border: #dfe8f5;
+      --accent: #2357f0;
+      --accent-dark: #123da3;
+      --accent-soft: #eaf1ff;
+      --success: #06734a;
+      --danger: #b42318;
+      --shadow: 0 18px 48px rgba(17, 34, 54, 0.10);
+      --chip-bg: #f4f8ff;
+      --chip-text: #2357f0;
+    }
+
+    body.dark {
+      color-scheme: dark;
+      --bg: #07111f;
+      --panel: #0f1b2e;
+      --text: #f3f7ff;
+      --muted: #9eb0c9;
+      --border: #22364d;
+      --accent: #6fa0ff;
+      --accent-dark: #80b6ff;
+      --accent-soft: rgba(111, 160, 255, 0.16);
+      --success: #39d98a;
+      --danger: #ff8a80;
+      --shadow: 0 20px 45px rgba(0, 0, 0, 0.28);
+      --chip-bg: rgba(111, 160, 255, 0.16);
+      --chip-text: #dce8ff;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #f9fbff 0%, #edf4ff 100%);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    body.dark {
+      background: linear-gradient(135deg, #07111f 0%, #0f1b2e 100%);
+    }
+
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px 18px 40px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 16px;
+      margin-bottom: 18px;
+      align-items: stretch;
+    }
+
+    .hero-copy, .hero-card, .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 24px;
+      position: relative;
+    }
+
+    .dashboard-signature {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 12px;
+      font-style: italic;
+      color: var(--muted);
+      opacity: 0.85;
+    }
+
+    .hero-card {
+      padding: 24px;
+      background: linear-gradient(135deg, #0f4bd0 0%, #2357f0 100%);
+      color: white;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      margin: 0 0 8px;
+      line-height: 1.2;
+    }
+
+    h1 { font-size: 32px; }
+    h2 { font-size: 20px; }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .hero-card p,
+    .hero-card li {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .theme-toggle {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: var(--chip-bg);
+      color: var(--chip-text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+    }
+
+    .status {
+      display: inline-block;
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #f8fbff;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    body.dark .status {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--chip-text);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .status.alt {
+      background: rgba(255,255,255,0.16);
+      color: white;
+      border-color: rgba(255,255,255,0.24);
+    }
+
+    .hero-card ul {
+      margin: 12px 0 0 18px;
+      padding: 0;
+      display: grid;
+      gap: 7px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 20px;
+    }
+
+    .panel-heading {
+      margin-bottom: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field-card {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fcfdff;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .field-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(17, 34, 54, 0.08);
+    }
+
+    body.dark .field-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    body.dark .field-card:hover {
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+    }
+
+    .field-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .field-meta {
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 700;
+      text-align: right;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+      background: #fff;
+      color: var(--text);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+    }
+
+    body.dark input, body.dark select {
+      background: #0b1422;
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    input:hover, select:hover {
+      transform: translateY(-1px);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(35, 87, 240, 0.16);
+    }
+
+    .field-foot {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 18px;
+      background: linear-gradient(135deg, var(--accent) 0%, #3b74ff 100%);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(35, 87, 240, 0.18);
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 100%);
+    }
+
+    .helper-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .error {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #fff5f4;
+      border: 1px solid #ffd9d3;
+      color: var(--danger);
+      line-height: 1.5;
+    }
+
+    .results {
+      display: grid;
+      gap: 10px;
+    }
+
+    .result-item {
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: linear-gradient(135deg, #fbfdff 0%, #f4f8ff 100%);
+      animation: riseUp 0.45s ease both;
+    }
+
+    body.dark .result-item {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(111, 160, 255, 0.09) 100%);
+    }
+
+    .result-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .result-item strong {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .value {
+      font-size: 18px;
+      font-weight: 700;
+      word-break: break-word;
+      color: var(--text);
+    }
+
+    .prob-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      background: var(--chip-bg);
+      color: var(--chip-text);
+    }
+
+    .prob-badge.high {
+      background: rgba(6, 115, 74, 0.12);
+      color: var(--success);
+    }
+
+    .prob-badge.medium {
+      background: rgba(35, 87, 240, 0.12);
+      color: var(--accent);
+    }
+
+    .prob-badge.low {
+      background: rgba(180, 35, 24, 0.12);
+      color: var(--danger);
+    }
+
+    .confidence-card {
+      margin-bottom: 10px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(35, 87, 240, 0.05);
+    }
+
+    body.dark .confidence-card {
+      background: rgba(111, 160, 255, 0.10);
+    }
+
+    .confidence-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(17, 34, 54, 0.10);
+      overflow: hidden;
+    }
+
+    body.dark .progress-track {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent) 0%, #5d8fff 100%);
+      transition: width 0.6s ease;
+    }
+
+    .mini-chart {
+      margin-top: 8px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 70px 1fr 44px;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bar-track {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(17, 34, 54, 0.10);
+      overflow: hidden;
+    }
+
+    body.dark .bar-track {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      transition: width 0.6s ease;
+    }
+
+    .bar-fill.success {
+      background: linear-gradient(90deg, var(--success) 0%, #38d98a 100%);
+    }
+
+    .bar-fill.failure {
+      background: linear-gradient(90deg, var(--danger) 0%, #ff8a80 100%);
+    }
+
+    .empty-state {
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      padding: 22px 16px;
+      text-align: center;
+      background: linear-gradient(135deg, #fafcff 0%, #f4f8ff 100%);
+    }
+
+    body.dark .empty-state {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .empty-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .note {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    @keyframes riseUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 960px) {
+      .hero, .layout { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .field-head { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="hero-copy">
+        <div class="dashboard-signature">dashboard by Sanket</div>
+        <div class="eyebrow">AI Career Placement Insight</div>
+        <h1>Placement Success Prediction</h1>
+        <p>Enter a realistic student profile and estimate the likelihood of a strong placement outcome from the available training data.</p>
+        <div class="hero-badges">
+          <span class="status">Service status: {{ service_status }}</span>
+          <span class="status">Live prediction model</span>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">🌙 Dark mode</button>
+        </div>
+        {% if target_info and target_info.get('description') %}
+          <div class="note">{{ target_info.get('description') }}</div>
+        {% endif %}
+      </div>
+      <div class="hero-card">
+        <h2>What this form expects</h2>
+        <ul>
+          <li>Use realistic academic and skill values.</li>
+          <li>Numeric fields show the accepted range for better input accuracy.</li>
+          <li>Scores are interpreted on familiar 0–100 or 0–10 scales.</li>
+        </ul>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Student Profile</h2>
+          <p>Fill in the details below to receive a probability-based placement prediction.</p>
+        </div>
+        <form method="post" action="/">
+          <div class="form-grid">
+            {% for spec in field_specs %}
+              <div class="field-card {% if spec.type == 'select' %}full{% endif %}">
+                <div class="field-head">
+                  <label for="{{ spec.name }}">{{ spec.label }}</label>
+                  {% if spec.type == 'number' %}
+                    <span class="field-meta">
+                      {% if spec.min is not none and spec.max is not none %}
+                        Range {{ spec.min }}–{{ spec.max }}
+                      {% elif spec.min is not none %}
+                        Min {{ spec.min }}
+                      {% elif spec.max is not none %}
+                        Max {{ spec.max }}
+                      {% endif %}
+                    </span>
+                  {% endif %}
+                </div>
+                {% if spec.type == 'select' %}
+                  <select id="{{ spec.name }}" name="{{ spec.name }}" required>
+                    <option value="">Select</option>
+                    {% for option in spec.options %}
+                      <option value="{{ option }}" {% if form_values.get(spec.name) == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                  </select>
+                {% else %}
+                  <input
+                    id="{{ spec.name }}"
+                    name="{{ spec.name }}"
+                    type="number"
+                    step="{{ spec.step }}"
+                    {% if spec.min is not none %}min="{{ spec.min }}"{% endif %}
+                    {% if spec.max is not none %}max="{{ spec.max }}"{% endif %}
+                    required
+                    value="{{ form_values.get(spec.name, '') }}"
+                    placeholder="Enter value"
+                  >
+                  <div class="field-foot">
+                    Accepted range: {% if spec.min is not none and spec.max is not none %}{{ spec.min }} to {{ spec.max }}{% elif spec.max is not none %}0 to {{ spec.max }}{% else %}{{ spec.min|default('0') }} and above{% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="actions">
+            <button type="submit">Predict placement outcome</button>
+            <span class="helper-note">Fields with a range are limited to realistic values for better predictions.</span>
+          </div>
+        </form>
+
+        {% if error %}
+          <div class="error">
+            {{ error }}
+            {% if missing %}
+              <div>Missing: {{ missing | join(', ') }}</div>
+            {% endif %}
+          </div>
+        {% endif %}
+      </section>
+
+      <aside class="panel">
+        <div class="panel-heading">
+          <h2>Prediction Result</h2>
+          <p>Outcome and probability summary</p>
+        </div>
+        {% if result %}
+          {% set success_prob = result['Success Probability']|float %}
+          {% set failure_prob = result['Failure Probability']|float %}
+          {% set outcome_badge_class = 'high' if success_prob >= 0.7 else 'medium' if success_prob >= 0.5 else 'low' %}
+          {% set outcome_badge_text = 'High confidence' if success_prob >= 0.7 else 'Moderate confidence' if success_prob >= 0.5 else 'Needs caution' %}
+          {% set success_badge_class = 'high' if success_prob >= 0.7 else 'medium' if success_prob >= 0.5 else 'low' %}
+          {% set success_badge_text = 'High confidence' if success_prob >= 0.7 else 'Moderate confidence' if success_prob >= 0.5 else 'Needs caution' %}
+          {% set failure_badge_class = 'high' if failure_prob >= 0.7 else 'medium' if failure_prob >= 0.5 else 'low' %}
+          {% set failure_badge_text = 'High risk' if failure_prob >= 0.7 else 'Moderate risk' if failure_prob >= 0.5 else 'Low risk' %}
+          <div class="results">
+            <div class="confidence-card">
+              <div class="confidence-head">
+                <span>Prediction confidence</span>
+                <span>{{ (success_prob * 100)|round(1) }}%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" style="width: {{ success_prob * 100 }}%"></div>
+              </div>
+              <div class="mini-chart">
+                <div class="bar-row">
+                  <span>Success</span>
+                  <div class="bar-track"><div class="bar-fill success" style="width: {{ success_prob * 100 }}%"></div></div>
+                  <strong>{{ (success_prob * 100)|round(1) }}%</strong>
+                </div>
+                <div class="bar-row">
+                  <span>Failure</span>
+                  <div class="bar-track"><div class="bar-fill failure" style="width: {{ failure_prob * 100 }}%"></div></div>
+                  <strong>{{ (failure_prob * 100)|round(1) }}%</strong>
+                </div>
+              </div>
+            </div>
+            <div class="result-item">
+              <div class="result-top">
+                <strong>Predicted Outcome</strong>
+                <span class="prob-badge {{ outcome_badge_class }}">{{ outcome_badge_text }}</span>
+              </div>
+              <div class="value">{{ result['Predicted Outcome'] }}</div>
+            </div>
+            <div class="result-item">
+              <div class="result-top">
+                <strong>Success Probability</strong>
+                <span class="prob-badge {{ success_badge_class }}">{{ success_badge_text }}</span>
+              </div>
+              <div class="value">{{ result['Success Probability'] }}</div>
+            </div>
+            <div class="result-item">
+              <div class="result-top">
+                <strong>Failure Probability</strong>
+                <span class="prob-badge {{ failure_badge_class }}">{{ failure_badge_text }}</span>
+              </div>
+              <div class="value">{{ result['Failure Probability'] }}</div>
+            </div>
+            <div class="result-item">
+              <strong>Target Source</strong>
+              <div class="value">{{ result['Target Source'] }}</div>
+            </div>
+            <div class="result-item">
+              <strong>Decision Rule</strong>
+              <div class="value">{{ result['Decision Rule'] }}</div>
+            </div>
+            {% if result.get('Salary Threshold (LPA)') is not none %}
+              <div class="result-item">
+                <strong>Salary Threshold (LPA)</strong>
+                <div class="value">{{ result['Salary Threshold (LPA)'] }}</div>
+              </div>
+            {% endif %}
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <div class="empty-icon">📈</div>
+            <p>Your prediction will appear here once you submit the form.</p>
+          </div>
+        {% endif %}
+      </aside>
+    </div>
+  </div>
+  <script>
+    const toggleButton = document.getElementById('themeToggle');
+    const storedTheme = localStorage.getItem('placement-theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const applyTheme = (theme) => {
+      document.body.classList.toggle('dark', theme === 'dark');
+      if (toggleButton) {
+        toggleButton.textContent = theme === 'dark' ? '☀️ Light mode' : '🌙 Dark mode';
+      }
+    };
+
+    const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+    applyTheme(initialTheme);
+
+    toggleButton?.addEventListener('click', () => {
+      const nextTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+      localStorage.setItem('placement-theme', nextTheme);
+      applyTheme(nextTheme);
+    });
+  </script>
+</body>
+</html>
