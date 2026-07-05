@@ -1,6 +1,6 @@
 # 🚀 Placement Success Prediction
 
-![Placement Success Prediction Banner](readme_assets/readme/banner.svg)
+![Placement Success Prediction Banner](readme_assets/banner.svg)
 
 > An interpretable machine learning system for forecasting placement outcomes with a strong emphasis on transparency, usability, and real-world deployment readiness.
 
@@ -197,7 +197,7 @@ The current trained model achieves an accuracy of 68.15% on the held-out evaluat
 
 A representative view of the prediction interface is shown below:
 
-![Demo Screenshot](readme_assets/readme/confusion_matrix.png)
+![Demo Screenshot](readme_assets/confusion_matrix.png)
 
 > The interface is designed to make predictions accessible while preserving clarity around the model’s output.
 
