@@ -1,6 +1,6 @@
 # 🚀 Placement Success Prediction
 
-![Placement Success Prediction Banner](assets/readme/banner.svg)
+![Placement Success Prediction Banner](readme_assets/readme/banner.svg)
 
 > An interpretable machine learning system for forecasting placement outcomes with a strong emphasis on transparency, usability, and real-world deployment readiness.
 
@@ -45,34 +45,57 @@ The system follows a structured, production-style workflow:
 
 ```text
 .
-├── data/
-│   └── student_placement_career_success_dataset_2026.csv
-├── models/
-│   ├── placement_model.pkl
-│   ├── scaler.pkl
-│   ├── encoder.pkl
-│   ├── xgb_model.pkl
-│   └── disease_model.pkl
-├── notebooks/
-│   └── PlacementSuccessPrediction.ipynb
-├── reports/
-│   ├── confusion_matrix.png
-│   ├── roc_curve.png
-│   ├── shap_summary.png
-│   ├── feature_importance.csv
-│   └── lime_explanation.html
-├── src/
-│   ├── app.py
-│   ├── data_ingestion.py
-│   ├── evaluate_models.py
-│   ├── explainability.py
-│   ├── feature_engineering.py
-│   ├── generate_explainability.py
-│   ├── preprocessing.py
-│   └── train_models.py
-├── templates/
-│   └── index.html
-└── README.md
+├──PLACEMENT SUCCESS PREDICTION PROJECT
+  ├── data
+  │   └── student_placement_career_success_dataset_2026
+  ├── models
+  │   ├── disease_model.pkl
+  │   ├── encoder.pkl
+  │   ├── placement_model.pkl
+  │   ├── scaler.pkl
+  │   └── xgb_model.pkl
+  ├── notebooks
+  │   └── PlacementSuccessPrediction.ipynb
+  ├── reports
+  │   ├── confusion_matrix.png
+  │   ├── feature_importance.csv
+  │   ├── lime_explanation.html
+  │   ├── roc_curve.png
+  │   └── shap_summary.png
+  ├── src
+  │   ├── __pycache__
+  │   │   ├── app.cpython-314.pyc
+  │   │   ├── data_ingestion.cpython-314.pyc
+  │   │   ├── evaluate_models.cpython-314.pyc
+  │   │   ├── explainability.cpython-314.pyc
+  │   │   ├── feature_engineering.cpython-314.pyc
+  │   │   ├── generate_explainability.cpython-314.pyc
+  │   │   ├── preprocessing.cpython-314.pyc
+  │   │   └── train_models.cpython-314.pyc
+  │   ├── app.py
+  │   ├── data_ingestion.py
+  │   ├── evaluate_models.py
+  │   ├── explainability.py
+  │   ├── feature_engineering.py
+  │   ├── generate_explainability.py
+  │   ├── preprocessing.py
+  │   └── train_models.py
+  ├── templates
+  │   └── index.html
+  ├── testing_and_results
+  │   ├── duplicate_removal.ipynb
+  │   ├── duplicated_placement_dataset.csv
+  │   ├── encoded_placement_dataset.csv
+  │   ├── encoding_test.ipynb
+  │   ├── feature_scaling_test.ipynb
+  │   ├── integration of mla model with app.ipynb
+  │   ├── missing_value.ipynb
+  │   ├── prediction test.ipynb
+  │   ├── test_Dataset Loading.ipynb
+  │   └── tested_missing_value_data.csv
+  └── requirements.txt
+├── README.md
+├── readme_assets
 ```
 
 ---
@@ -174,7 +197,7 @@ The current trained model achieves an accuracy of 68.15% on the held-out evaluat
 
 A representative view of the prediction interface is shown below:
 
-![Demo Screenshot](assets/readme/confusion_matrix.png)
+![Demo Screenshot](readme_assets/readme/confusion_matrix.png)
 
 > The interface is designed to make predictions accessible while preserving clarity around the model’s output.
 
